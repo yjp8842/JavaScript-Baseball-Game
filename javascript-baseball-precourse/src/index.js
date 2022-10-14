@@ -13,6 +13,7 @@ export default class BaseballGame {
       this.checkButtonClick();
       this.restartButtonClick();
       this.computerNum = this.answerNumbers();
+      console.log('old com :', this.computerNum);
   }
 
   // 랜덤으로 1-9까지의 숫자를 선택 (컴퓨터)
@@ -24,6 +25,7 @@ export default class BaseballGame {
         answer.push(num);
       }
     }
+    console.log('computer : ', answer);
     return answer;
   }
 
@@ -35,6 +37,10 @@ export default class BaseballGame {
       // user가 입력한 값이 유효하면
       if (checkValidation(userNum)) {
         this.resultMessage(this.play(this.computerNum, userNum));
+        // 한별 추가 -> 여기에 if 넣고 아까처럼 새로 computerNum 만드는거로 
+        if(this.play(this.computerNum, userNum) === '<strong>🎉 정답을 맞추셨습니다! 🎉</strong>') {
+          this.computerNum = this.answerNumbers();
+        }
       } else {
         alert('잘못된 값을 입력했습니다.');
       }
@@ -54,7 +60,7 @@ export default class BaseballGame {
     } else if (strikes === 0) {
       return `${balls}볼`;
     }
-    return `${balls}볼` `${strikes}스트라이크`;
+    return `${balls}볼 ${strikes}스트라이크`;
   }
 
   // 결과 메시지
@@ -70,9 +76,13 @@ export default class BaseballGame {
   // 재시작 버튼을 눌렀을 때
   restartButtonClick() {
     const restartButton = document.getElementById('game-restart-button');
-    restartButton.addEventListener('click', (e) => {
+    restartButton.addEventListener('click', () => {
       this.userInput.value = '';
-      new BaseballGame();
+      this.result.innerHTML = '';
+      // 얘가 살아있으면 재귀가 넘쳐
+      // new BaseballGame();
+      // this.computerNum = this.answerNumbers();
+      // console.log('new com :', this.computerNum)
     });
   }
 }
